@@ -1,4 +1,4 @@
-# rpg
+# VUEJS PROJECT
 
 ## Project setup
 ```
