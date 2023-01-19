@@ -4,9 +4,9 @@
       <!-- partie gauche -->
       <div style="text-align: left; width: 30%">
         <h1>Les villes</h1>
-        <label for="filteractive">filtrage possible : </label><input type="checkbox" v-model="filterActive" id="filteractive">
+        <label for="filteractive">Filtrage possible : </label><input type="checkbox" v-model="filterActive" id="filteractive">
         <div v-if="filterActive">
-          <label for="filtertown">filtre : </label><input class="townselect" :value="filter" @input="townSelected($event.target.value)" id="filtertown">
+          <label for="filtertown">Filtre : </label><input class="townselect" :value="filter" @input="townSelected($event.target.value)" id="filtertown">
         </div>
         <ul>
           <li v-for="(ville, index) in villesFiltre" :key="index">{{ville.nom}}</li>
@@ -14,15 +14,15 @@
       </div>
       <!-- partie droite -->
       <div v-if="currentTown" style="text-align: left; width: 80%">
-        <h1>{{currentTown.nom}}</h1>
-        <table>
-          <tr>
-          <th>rues: {{currentTown.rues.length}}</th>
-          <th>boutiques</th>
+        <h1>{{currentTown.nom.toUpperCase()}}</h1>
+        <v-simple-table>
+          <tr class="text-center">
+          <th>Rues: {{currentTown.rues.length}}</th>
+          <th>Boutiques</th>
           </tr>
           <tr v-for="(street, index) in currentTown.rues" :key="index">
             <td>
-              {{street.nom}} : {{ street.boutiques.length }} boutiques
+               {{street.nom}} : {{ street.boutiques.length }} boutiques
             </td>
             <td>
               <CheckedList
@@ -34,7 +34,7 @@
               </CheckedList>
             </td>
           </tr>
-        </table>
+        </v-simple-table>
         <ShopDetails :shop="currentShop"></ShopDetails>
       </div>
     </div>

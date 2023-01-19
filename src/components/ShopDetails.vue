@@ -1,12 +1,12 @@
 <template>
   <div>
-    <table v-if="shop">
-      <tr>
-        <td colspan="2">{{shop.nom}}</td>
+    <v-simple-table v-if="shop" >
+      <tr class="text-center">
+        <td colspan="2"><b> <span style="color: cornflowerblue;">{{shop.nom.toUpperCase()}}</span></b></td>
       </tr>
-      <tr>
-        <td>Stock : {{shop.itemStock.length}} items</td>
-        <td>Sur commande : {{shop.itemCommande.length}} items</td>
+      <tr class="text-center">
+        <td><b>Stock :</b> {{shop.itemStock.length}} items</td>
+        <td><b>Sur commande :</b> {{shop.itemCommande.length}} items</td>
       </tr>
       <tr>
         <td>
@@ -33,7 +33,7 @@
           </CheckedList>
         </td>
       </tr>
-    </table>
+    </v-simple-table>
   </div>
 </template>
 

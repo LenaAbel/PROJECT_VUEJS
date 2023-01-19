@@ -10,7 +10,9 @@ export default new Vuex.Store({
   // state = les données centralisées
   state: () => ({
     villes: [],
-    persos: []
+    persos: [],
+    currentPerso: null,
+    currentShop: null
   }),
   // mutations = fonctions synchrones pour mettre à jour le state (!!! interdit de modifier directement le state)
   mutations: {
@@ -19,6 +21,22 @@ export default new Vuex.Store({
     },
     updatePersos(state, persos) {
       state.persos = persos
+    },
+    setCurrentPerso(state, perso) {
+        state.currentPerso = perso
+        console.log("By here!")
+    },
+    // ne vérifie pas l'or possédé par le personnage courant,
+    // ajouter l'item passé en paramètre à la liste itemAchetes du personnage courant,
+    // supprime l'item passé en paramètre à la liste des items vendus par la boutique courante
+    sell(state, item) {
+      if (state.currentPerso) {
+        state.currentPerso.itemsAchetes.push(item)
+        state.currentPerso.or -= item.prix
+        state.currentShop.itemsVendus.splice(state.currentShop.itemsVendus.indexOf(item), 1)
+      } else {
+        console.log("Pas de personnage courant")
+      }
     }
   },
   // actions = fonctions asynchrone pour mettre à jour le state, en faisant appel aux mutations, via la fonction commit()
@@ -42,6 +60,12 @@ export default new Vuex.Store({
       else {
         console.log(response.data)
       }
+    }
+  },
+  getters : {
+    // Renvoyer la quantitié d'or du perso courant ou bien 0 si pas de perso courant
+    currentGoldPerso(state) {
+        return state.currentPerso ? state.currentPerso.gold : 0;
     }
   }
 })

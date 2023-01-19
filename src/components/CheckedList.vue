@@ -9,7 +9,7 @@
       <span v-for="(field, index) in fields" :key="index">
         {{item[field]}}
       </span>
-      <v-btn v-if="itemButton && itemButton.show" color="grey" @click="$emit('item-button-clicked',indexRow)">{{itemButton.text}}</v-btn>
+      <v-btn v-if="itemButton && itemButton.show" color="blue"  @click="$emit('item-button-clicked',indexRow)">{{itemButton.text}}</v-btn>
     </p>
     <v-btn v-if="listButton && listButton.show" color="green" @click="$emit('list-button-clicked')">{{listButton.text}}</v-btn>
   </div>

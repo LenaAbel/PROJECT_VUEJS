@@ -4,7 +4,8 @@
       <!-- partie gauche -->
       <div style="text-align: left; width: 30%">
         <h1>Les personnages</h1>
-        <select v-model="selected" class="persoselect">
+        <!--  lors de la sélection d'un personnage, on appelle la mutation setCurrentPerso(state, perso) afin de mettre à jour le personnage courant. -->
+        <select v-model="selected"  @change="setCurrentPerso(selected)"  class="persoselect" >
           <option disabled value="">Sélectionner un personnage</option>
           <option v-for="(perso, index) in persos" :key="index" :value="perso">{{perso.nom}}</option>
         </select>
@@ -12,19 +13,19 @@
       <!-- partie droite -->
       <div v-if="selected" style="text-align: left; width: 80%">
         <h1>{{selected.nom}}</h1>
-        <table>
-          <tr>
+        <v-simple-table>
+          <tr class="text-center">
             <th>Attributs</th>
             <th>Emplacements</th>
           </tr>
           <tr>
             <td>
               <ul>
-                <li>niveau : {{ selected.niveau}}</li>
-                <li>vie : {{ selected.attributs.vie}}</li>
-                <li>vitalité : {{ selected.attributs.vitalite}}</li>
-                <li>force : {{ selected.attributs.force}}</li>
-                <li>armure : {{ selected.attributs.protection}}</li>
+                <li><span style="color: darkblue"><b>Niveau :</b></span>{{ selected.niveau}}</li>
+                <li><span style="color: green"><b>Vie :</b></span>{{ selected.attributs.vie}}</li>
+                <li><b><span style="color: chocolate">Vitalité :</span></b> {{ selected.attributs.vitalite}}</li>
+                <li><b><span style="color: red">Force :</span></b> {{ selected.attributs.force}}</li>
+                <li><b><span style="color: dimgrey">Armure :</span></b> {{ selected.attributs.protection}}</li>
               </ul>
             </td>
             <td>
@@ -37,7 +38,7 @@
             </td>
           </tr>
           <tr>
-            <td> or : {{selected.or}}</td>
+            <td><b> Or : <span style="color: goldenrod">{{selected.or}}</span></b></td>
             <td>
               <CheckedList
                   :data="selected.itemsAchetes"
@@ -53,7 +54,7 @@
               </CheckedList>
             </td>
           </tr>
-        </table>
+        </v-simple-table>
       </div>
     </div>
   </v-container>
@@ -62,7 +63,7 @@
 
 <script>
 
-import {mapState} from 'vuex'
+import {mapMutations, mapState} from 'vuex'
 import CheckedList from "@/components/CheckedList";
 
 export default {
@@ -74,6 +75,7 @@ export default {
   }),
   computed: {
     ...mapState(['persos']),
+    ...mapMutations(["setCurrentPerso"]),
     checkedBoughtItems() {
       if (this.selected === null) return []
       // construit un tableau contenant autant de cases qu'il y a d'items achetés
@@ -94,21 +96,21 @@ export default {
         slot.label = 'tête'
         tab.push(slot)
         slot = this.selected.emplacements.find(s => s.nom === 'body')
-        slot.label = 'corps'
+        slot.label = 'Corps'
         tab.push(slot)
         slot = this.selected.emplacements.find(s => s.nom === 'hands')
-        slot.label = 'mains'
+        slot.label = 'Mains'
         tab.push(slot)
         slot = this.selected.emplacements.find(s => s.nom === 'belt')
-        slot.label = 'ceinture'
+        slot.label = 'Ceinture'
         tab.push(slot)
         slot = this.selected.emplacements.find(s => s.nom === 'bag')
-        slot.label = 'sac à dos'
+        slot.label = 'Sac à dos'
         tab.push(slot)
         return tab
       }
       return []
-    }
+    },
   },
   methods: {
     showItemPrice(index) {
