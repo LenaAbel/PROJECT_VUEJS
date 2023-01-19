@@ -5,7 +5,7 @@
       <div style="text-align: left; width: 30%">
         <h1>Les personnages</h1>
         <!--  lors de la sélection d'un personnage, on appelle la mutation setCurrentPerso(state, perso) afin de mettre à jour le personnage courant. -->
-        <select v-model="selected"  @change="setCurrentPerso(selected)"  class="persoselect" >
+        <select v-model="selected"  @change="$store.dispatch('setCurrentPerso', selected)"  class="persoselect" >
           <option disabled value="">Sélectionner un personnage</option>
           <option v-for="(perso, index) in persos" :key="index" :value="perso">{{perso.nom}}</option>
         </select>
@@ -63,7 +63,7 @@
 
 <script>
 
-import {mapMutations, mapState} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 import CheckedList from "@/components/CheckedList";
 
 export default {
@@ -75,7 +75,8 @@ export default {
   }),
   computed: {
     ...mapState(['persos']),
-    ...mapMutations(["setCurrentPerso"]),
+    // ...mapMutations(["setCurrentPerso"]),
+    ...mapActions(["setCurrentPerso"]),
     checkedBoughtItems() {
       if (this.selected === null) return []
       // construit un tableau contenant autant de cases qu'il y a d'items achetés
@@ -131,7 +132,13 @@ export default {
         // enleve index
         this.idSelectedBoughtItems.splice(id,1)
       }
-    }
+    },
+    // onChange() {
+    //   console.log(this.selected)
+    //   this.$store.
+    //   return this.$store.dispatch("setCurrentPerso", this.selected)
+    //   // this.$store.ge
+    // }
   },
 }
 </script>

@@ -81,10 +81,26 @@ export default {
       }
     },
     buyOneItem(index) {
-      console.log('achat de '+this.shop.itemStock[index].nom)
+      if (this.shop.itemStock[index].prix <= this.$store.getters.currentGoldPerso) {
+        this.$store.dispatch("buyingItem", this.shop.itemStock[index])
+        console.log('achat de ' + this.shop.itemStock[index].nom)
+      } else {
+        alert('Vous n\'avez pas assez d\'argent pour acheter cet objet.')
+      }
     },
     buySelectedItems() {
-      console.log('achat des items d\'indice '+this.idSelectedItemsStock)
+      let sum = 0
+      for (let i = 0; i < this.idSelectedItemsStock.length; i++) {
+        sum += this.shop.itemStock[this.idSelectedItemsStock[i]].prix
+      }
+      if (sum <= this.$store.getters.currentGoldPerso) {
+        for (let i =0; i < this.idSelectedItemsStock.length; i++) {
+          this.$store.dispatch("buyingItem", this.shop.itemStock[this.idSelectedItemsStock[i]])
+          console.log('achat de ' + this.shop.itemStock[this.idSelectedItemsStock[i]])
+        }
+      } else {
+        alert('Vous n\'avez pas assez d\'argent pour acheter ces objets.')
+      }
     },
     orderOneItem(index) {
       console.log('commande de '+this.shop.itemCommande[index].nom)

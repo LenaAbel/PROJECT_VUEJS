@@ -24,20 +24,26 @@ export default new Vuex.Store({
     },
     setCurrentPerso(state, perso) {
         state.currentPerso = perso
-        console.log("By here!")
+    },
+    setCurrentShop(state, shop) {
+        state.currentShop = shop
     },
     // ne vérifie pas l'or possédé par le personnage courant,
     // ajouter l'item passé en paramètre à la liste itemAchetes du personnage courant,
     // supprime l'item passé en paramètre à la liste des items vendus par la boutique courante
     sell(state, item) {
+      console.log("SELLING")
       if (state.currentPerso) {
         state.currentPerso.itemsAchetes.push(item)
         state.currentPerso.or -= item.prix
-        state.currentShop.itemsVendus.splice(state.currentShop.itemsVendus.indexOf(item), 1)
+        state.currentShop.itemStock.splice(state.currentShop.itemStock.indexOf(item), 1)
       } else {
         console.log("Pas de personnage courant")
       }
-    }
+    },
+    // stock(state, item) {
+    //
+    // }
   },
   // actions = fonctions asynchrone pour mettre à jour le state, en faisant appel aux mutations, via la fonction commit()
   actions: {
@@ -60,12 +66,21 @@ export default new Vuex.Store({
       else {
         console.log(response.data)
       }
+    },
+    async setCurrentPerso({commit}, perso) {
+      commit("setCurrentPerso", perso)
+    },
+    async setCurrentShop({commit}, shop) {
+      commit("setCurrentShop", shop)
+    },
+    async buyingItem({commit}, item) {
+      commit("sell", item)
     }
   },
   getters : {
     // Renvoyer la quantitié d'or du perso courant ou bien 0 si pas de perso courant
     currentGoldPerso(state) {
-        return state.currentPerso ? state.currentPerso.gold : 0;
+        return state.currentPerso ? state.currentPerso.or : 0;
     }
   }
 })

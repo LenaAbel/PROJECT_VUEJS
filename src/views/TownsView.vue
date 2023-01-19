@@ -22,7 +22,7 @@
           </tr>
           <tr v-for="(street, index) in currentTown.rues" :key="index">
             <td>
-               {{street.nom}} : {{ street.boutiques.length }} boutiques
+                {{street.nom}} : {{ street.boutiques.length }} boutiques
             </td>
             <td>
               <CheckedList
@@ -79,6 +79,7 @@ export default {
     },
     shopSelected(streetIndex, shopIndex) {
       this.currentShop = this.currentTown.rues[streetIndex].boutiques[shopIndex]
+      this.$store.dispatch('setCurrentShop', this.currentShop)
     }
   },
 }
