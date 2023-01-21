@@ -158,7 +158,7 @@ export default {
       if(confirm('Voulez-vous assigner '+item.nom+' à '+slot.label+' ?')) {
         this.$store.commit('assignItem', {item, slot})
       }
-      },
+    },
     unassignItem(item, slot) {
       this.$store.commit('unassignItem', {item, slot})
     },
