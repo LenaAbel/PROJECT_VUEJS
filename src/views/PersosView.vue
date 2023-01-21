@@ -5,7 +5,7 @@
       <div style="text-align: left; width: 30%">
         <h1>Les personnages</h1>
         <!--  lors de la sélection d'un personnage, on appelle la mutation setCurrentPerso(state, perso) afin de mettre à jour le personnage courant. -->
-        <select v-model="selected"  @change="setCurrentPerso(selected)"  class="persoselect" >
+        <select v-model="selected"  @change="$store.dispatch('setCurrentPerso', selected)"  class="persoselect" >
           <option disabled value="">Sélectionner un personnage</option>
           <option v-for="(perso, index) in persos" :key="index" :value="perso">{{perso.nom}}</option>
         </select>
@@ -33,6 +33,8 @@
                 <li v-for="(slot, index) in slots" :key="index">
                   {{ slot.label }} <span v-if="slot.items.length >0">[{{slot.items.length}}]</span> :
                   <span v-for="(item, index) in slot.items" :key="index">{{item.nom}}, </span>
+                  <button v-if="slot.items.length === 0" @click="assignItem(selected.itemsAchetes, slot)"><b>Assigner</b></button>
+                  <button v-if="slot.items.length > 0" @click="unassignItem(slot.items[0], slot)"><b>Désassigner</b></button>
                 </li>
               </ul>
             </td>
@@ -52,6 +54,15 @@
                   @list-button-clicked="showItemsInfo"
               >
               </CheckedList>
+              <br>
+              <div>
+                <h3>Sélectionner un item à revendre :</h3>
+                <select v-model="selectedItem"  @change="resellItems()" class="persoselect" >
+                  <option disabled value="">Sélectionner un item</option>
+                  <option v-for="(item, index) in selected.itemsAchetes" :key="index" :value="item">{{item.nom}}</option>
+                </select>
+              </div>
+              <br>
             </td>
           </tr>
         </v-simple-table>
@@ -63,7 +74,7 @@
 
 <script>
 
-import {mapMutations, mapState} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 import CheckedList from "@/components/CheckedList";
 
 export default {
@@ -72,10 +83,12 @@ export default {
   data: () => ({
     selected: null,
     idSelectedBoughtItems: [], // ce tableau ne contient que les ids des items achetés sélectionnés.
+    selectedItem: null,
+
   }),
   computed: {
     ...mapState(['persos']),
-    ...mapMutations(["setCurrentPerso"]),
+    ...mapActions(["setCurrentPerso"]),
     checkedBoughtItems() {
       if (this.selected === null) return []
       // construit un tableau contenant autant de cases qu'il y a d'items achetés
@@ -131,7 +144,24 @@ export default {
         // enleve index
         this.idSelectedBoughtItems.splice(id,1)
       }
-    }
+    },
+    //tirer aléatoirement un prix de revente entre 0.4 et 0.9 fois le prix d'achat d'origine,
+    //d'afficher une boîte de dialogue pour indiquer ce prix et 2 boutons pour refuser ou accepter,
+    //en cas d'acceptation, appeler la mutation resell(...), avec en paramètre un objet au format { item: ..., gold: ... }., permettant de spécifier quel item revendre et à quel prix.
+    resellItems() {
+      let price = Math.round(this.selectedItem.prix * (0.4 + Math.random() * 0.5))
+      if (confirm('Voulez-vous vendre '+ this.selectedItem.nom+' pour '+ price +' pièces d\'or ?')) {
+        this.$store.commit('resell', {item: this.selectedItem, gold: price})
+      }
+    },
+    assignItem(item, slot) {
+      if(confirm('Voulez-vous assigner '+item.nom+' à '+slot.label+' ?')) {
+        this.$store.commit('assignItem', {item, slot})
+      }
+      },
+    unassignItem(item, slot) {
+      this.$store.commit('unassignItem', {item, slot})
+    },
   },
 }
 </script>

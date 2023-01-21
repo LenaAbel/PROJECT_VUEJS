@@ -81,14 +81,36 @@ export default {
       }
     },
     buyOneItem(index) {
-      console.log('achat de '+this.shop.itemStock[index].nom)
+      if (this.shop.itemStock[index].prix <= this.$store.getters.currentGoldPerso) {
+        this.$store.dispatch("buyingItem", this.shop.itemStock[index])
+        console.log('achat de ' + this.shop.itemStock[index].nom)
+      } else {
+        alert('Vous n\'avez pas assez d\'argent pour acheter cet objet.')
+      }
     },
     buySelectedItems() {
-      console.log('achat des items d\'indice '+this.idSelectedItemsStock)
+      let sum = 0
+      for (let i = 0; i < this.idSelectedItemsStock.length; i++) {
+        sum += this.shop.itemStock[this.idSelectedItemsStock[i]].prix
+      }
+      if (sum <= this.$store.getters.currentGoldPerso) {
+        for (let i =0; i < this.idSelectedItemsStock.length; i++) {
+          this.$store.dispatch("buyingItem", this.shop.itemStock[this.idSelectedItemsStock[i]])
+          console.log('achat de ' + this.shop.itemStock[this.idSelectedItemsStock[i]])
+        }
+      } else {
+        alert('Vous n\'avez pas assez d\'argent pour acheter ces objets.')
+      }
     },
+    // Lorsqu'une boutique est choisie, on peut cliquer sur les boutons des items à commander.
+    // Dans ce cas, un message d'alerte indique dans combien de secondes l'item sera disponible à la vente, ce temps étant tiré aléatoirement entre 2 et 10 secondes.
+    // Cette opération ne devant pas bloquer le navigateur, il faut qu'elle soit implémentée sous la forme d'une action + mutation dans le store.
     orderOneItem(index) {
-      console.log('commande de '+this.shop.itemCommande[index].nom)
-    }
+      let time = Math.floor(Math.random() * 8000) + 2000;
+      if(confirm(`L'item sera disponible dans ${time/1000} secondes. Voulez-vous continuer?`)){
+        this.$store.dispatch('order', { time, item: this.shop.itemCommande[index] })
+      }
+    },
   },
   watch: {
     // Si on change de boutique, le tableau idSelectedItemStock ne va pas changer.

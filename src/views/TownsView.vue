@@ -17,12 +17,12 @@
         <h1>{{currentTown.nom.toUpperCase()}}</h1>
         <v-simple-table>
           <tr class="text-center">
-          <th>Rues: {{currentTown.rues.length}}</th>
-          <th>Boutiques</th>
+            <th>Rues: {{currentTown.rues.length}}</th>
+            <th>Boutiques</th>
           </tr>
           <tr v-for="(street, index) in currentTown.rues" :key="index">
             <td>
-               {{street.nom}} : {{ street.boutiques.length }} boutiques
+              {{street.nom}} : {{ street.boutiques.length }} boutiques
             </td>
             <td>
               <CheckedList
@@ -57,7 +57,7 @@ export default {
     ...mapState(['villes']),
     villesFiltre() {
       if (this.filterActive) {
-        return this.villes.filter(v => v.nom.includes(this.filter))
+        return this.villes.filter(v => v.nom.match(this.filter))
       }
       else {
         return this.villes
@@ -79,6 +79,7 @@ export default {
     },
     shopSelected(streetIndex, shopIndex) {
       this.currentShop = this.currentTown.rues[streetIndex].boutiques[shopIndex]
+      this.$store.dispatch('setCurrentShop', this.currentShop)
     }
   },
 }
@@ -88,7 +89,7 @@ export default {
 table, th, td {
   border: 1px solid;
 }
- .townselect {
-   background-color: lightgray;
- }
+.townselect {
+  background-color: lightgray;
+}
 </style>
