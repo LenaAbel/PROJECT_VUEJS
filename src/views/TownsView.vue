@@ -9,7 +9,9 @@
           <label for="filtertown">Filtre : </label><input class="townselect" :value="filter" @input="townSelected($event.target.value)" id="filtertown">
         </div>
         <ul>
-          <li v-for="(ville, index) in villesFiltre" :key="index">{{ville.nom}}</li>
+          <li v-for="(ville, index) in villesFiltre" :key="index">
+            <router-link :to="{ name: 'town', params: { id: index } }">{{ville.nom}}</router-link>
+          </li>
         </ul>
       </div>
       <!-- partie droite -->
@@ -22,7 +24,7 @@
           </tr>
           <tr v-for="(street, index) in currentTown.rues" :key="index">
             <td>
-              {{street.nom}} : {{ street.boutiques.length }} boutiques
+              <router-link :to="{ name: 'street', params: { townId: currentTown.id, streetId: street.id } }">{{street.nom}} : {{ street.boutiques.length }} boutiques</router-link>
             </td>
             <td>
               <CheckedList
@@ -35,19 +37,20 @@
             </td>
           </tr>
         </v-simple-table>
-        <ShopDetails :shop="currentShop"></ShopDetails>
+        <router-view />
       </div>
     </div>
   </v-container>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import CheckedList from "@/components/CheckedList";
-import ShopDetails from "@/components/ShopDetails";
-import {mapState} from 'vuex'
+
 export default {
   name: 'TownsView',
-  components: {CheckedList, ShopDetails},
+  components: {CheckedList},
   data: () => ({
     filter: '',
     filterActive: false,
@@ -55,22 +58,14 @@ export default {
   }),
   computed: {
     ...mapState(['villes']),
+    ...mapGetters(['currentTown']),
     villesFiltre() {
       if (this.filterActive) {
         return this.villes.filter(v => v.nom.match(this.filter))
-      }
-      else {
-        return this.villes
+      } else {
+      return this.villes
       }
     },
-    currentTown() {
-      if (this.villesFiltre.length === 1) {
-        return this.villesFiltre[0]
-      }
-      else {
-        return null
-      }
-    }
   },
   methods: {
     townSelected(evt) {
