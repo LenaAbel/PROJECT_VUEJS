@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <v-app-bar
-      app
-      color="primary"
-      dark
+        app
+        color="primary"
+        dark
     >
       <NavBar :titles="titles" @menu-clicked="goTo"></NavBar>
     </v-app-bar>
@@ -23,8 +23,8 @@ export default {
   name: 'App',
   components: {NavBar},
   data: () => ({
-    titles: [ {text:'persos', color: 'blue'},
-      {text:'towns', color: 'red'},
+    titles: [ {text:'Personnages', color: 'blue'},
+      {text:'Villes', color: 'red'},
     ],
     currentIndex: -1
   }),

@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 import TownService from '../services/towns.service'
 import CharacService from '../services/persos.service'
+import {itemLimits} from "@/services/data.service";
 
 export default new Vuex.Store({
     // state = les données centralisées
@@ -68,10 +69,53 @@ export default new Vuex.Store({
                 console.log("Pas de personnage courant")
             }
         },
-
-        //assignItem(state, data) {
-
-        //}
+        assignItemToSlot(state, data) {
+            // check if the selected item matches the type and there is still room in the slot
+            // remove item from itemsAchetes
+            // add item to the appropriate slot
+            // display alert message
+            let itemInType = itemLimits.filter(item => item.types.includes(data.item.type))
+            // afficher les items assigné du perso courant
+            if(state.currentPerso) {
+                if(itemInType[0].slot === data.slot.nom) {
+                    // verifier que le slot n'est pas plein en fonction de la limite indiqué dans itemLimits
+                    if(data.slot.items.length < itemInType[0].limit) {
+                        state.currentPerso.emplacements.forEach(slot => {
+                            if (slot.nom === data.slot.nom) {
+                                state.currentPerso.itemsAchetes.splice(state.currentPerso.itemsAchetes.indexOf(data.item), 1)
+                                // push l'item dans l'emplacement du personnage courant
+                                slot.items.push(data.item)
+                                alert(`L'item ${data.item.nom} a été assigné au slot ${data.slot.label}`)
+                            }
+                        })
+                    } else {
+                        alert(`Le slot ${data.slot.label} est plein`)
+                    }
+                } else {
+                    alert(`L'item ${data.item.nom} ne peut pas être assigné au slot ${data.slot.label}, mais au slot ${itemInType[0].slot}`)
+                }
+            } else {
+                console.log("Pas de personnage courant")
+            }
+        },
+        unassignItemFromSlot(state, data) {
+            // remove item from slot
+            // add item to itemsAchetes
+            // display alert message
+            if(state.currentPerso) {
+                state.currentPerso.emplacements.forEach(slot => {
+                    if (slot.nom === data.slot.nom) {
+                        slot.items.splice(slot.items.indexOf(data.item), 1)
+                        state.currentPerso.itemsAchetes.push(data.item)
+                        alert(`L'item ${data.item.nom} a été retiré du slot ${data.slot.label}`)
+                    } else {
+                        alert(`L'item ${data.item.nom} n'est pas assigné au slot ${data.slot.label}`)
+                    }
+                })
+            } else {
+                console.log("Pas de personnage courant")
+            }
+        }
     },
     // actions = fonctions asynchrone pour mettre à jour le state, en faisant appel aux mutations, via la fonction commit()
     actions: {
@@ -123,12 +167,12 @@ export default new Vuex.Store({
             console.log("RESELLING")
             commit("resell", data)
         },
-        async assignItem({commit}, data) {
-            console.log("ASSIGNING")
-            commit("assignItem", data)
+        async assignItemToSlot({commit}, data) {
+            console.log("ASSIGNING ITEM")
+            commit("assignItemToSlot", data)
         },
-        async unassignItem({commit}, payload) {
-            commit('unassignItem', payload)
+        async unassignItemFromSlot({commit}, data) {
+            commit('unassignItemFromSlot', data)
         }
     },
     getters: {

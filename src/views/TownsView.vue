@@ -63,7 +63,7 @@ export default {
       if (this.filterActive) {
         return this.villes.filter(v => v.nom.match(this.filter))
       } else {
-      return this.villes
+        return this.villes
       }
     },
   },
