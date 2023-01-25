@@ -22,13 +22,12 @@ const routes = [
           streets: StreetsView
         },
         props: {
-          streets: route => ({
-            idTown: route.params.idtown
-          })
+          streets: route => ({ idTown: route.params.idtown}
+          )
         },
         children: [
           {
-            path: '/streets/:idstreet',
+            path: ':idstreet',
             name: 'shops',
             components: {
               shops: shopView

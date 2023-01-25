@@ -78,7 +78,7 @@ export default {
       this.$store.dispatch('setCurrentShop', this.currentShop)
     },
     navigateToSelectedTown(){
-      console.log(this.villesFiltre.find(element => element.nom == this.selected)._id )
+      console.log('navigateToSelectedTown ',this.villesFiltre.find(element => element.nom == this.selected)._id )
       //let id = this.villesFiltre.find(element => element.nom == this.selected)._id
       this.$store.dispatch('setCurrentTown', this.villesFiltre.find(element => element.nom == this.selected))
       this.$router.push({
