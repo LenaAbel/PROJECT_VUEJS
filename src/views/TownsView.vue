@@ -10,8 +10,8 @@
         </select>
       </div>
       <!-- partie droite -->
+      <router-view name="streets"></router-view>
       <div v-if="idtown" style="text-align: left; width: 80%">
-        <router-view> </router-view>
         <h1>{{getCurrentTown.nom.toUpperCase()}}</h1>
         <v-simple-table>
           <tr class="text-center">
@@ -53,7 +53,6 @@ export default {
     filter: '',
     filterActive: false,
     currentShop: null,
-    currentTown: null,
     selected: null,
   }),
   computed: {
@@ -63,7 +62,7 @@ export default {
       if (this.filterActive) {
         return this.villes.filter(v => v.nom.match(this.filter))
       } else {
-        return this.villes
+      return this.villes
       }
     },
   },
@@ -77,9 +76,10 @@ export default {
       this.$store.dispatch('setCurrentShop', this.currentShop)
     },
     navigateToSelectedTown(){
-      console.log(this.selected)
+      console.log(this.villesFiltre.find(element => element.nom == this.selected)._id )
+      //let id = this.villesFiltre.find(element => element.nom == this.selected)._id
       this.$store.dispatch('setCurrentTown', this.villesFiltre.find(element => element.nom == this.selected))
-      this.$router.push({ name: 'town', params: { idtown: this.villesFiltre.find(element => element.nom == this.selected)._id } });
+      this.$router.push({ name: 'streets', params: { idtown: this.villesFiltre.find(element => element.nom == this.selected)._id } });
     }
   },
 }
