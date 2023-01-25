@@ -15,9 +15,17 @@ const routes = [
     children: [
       {
         path: ':idtown',
+<<<<<<< Updated upstream
         component: StreetsView,
         name: 'streets',
         props : true
+=======
+        components: {streets: StreetsView},
+        name: 'streets',
+        props: {
+          streets: route => ({ idTown: route.params.idtown })
+        },
+>>>>>>> Stashed changes
       },
     ]
   },
