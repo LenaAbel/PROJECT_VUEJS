@@ -74,7 +74,10 @@ export default new Vuex.Store({
             // remove item from itemsAchetes
             // add item to the appropriate slot
             // display alert message
-            let itemInType = itemLimits.filter(item => item.types.includes(data.item.type))
+            let itemInType = itemLimits.filter(item => {
+                //console.log('Type : ', item.types.includes(data.item.type))
+                return item.types.includes(data.item.type)
+            })
             // afficher les items assigné du perso courant
             if(state.currentPerso) {
                 if(itemInType[0].slot === data.slot.nom) {
@@ -102,18 +105,24 @@ export default new Vuex.Store({
             // remove item from slot
             // add item to itemsAchetes
             // display alert message
-            if(state.currentPerso) {
-                state.currentPerso.emplacements.forEach(slot => {
-                    if (slot.nom === data.slot.nom) {
-                        slot.items.splice(slot.items.indexOf(data.item), 1)
-                        state.currentPerso.itemsAchetes.push(data.item)
-                        alert(`L'item ${data.item.nom} a été retiré du slot ${data.slot.label}`)
-                    } else {
-                        alert(`L'item ${data.item.nom} n'est pas assigné au slot ${data.slot.label}`)
-                    }
-                })
+            let found = false;
+            itemLimits.filter(item => {
+                if (item.types.includes(data.item.type) && item.slot === data.slot.nom){
+                    found = true;
+                    console.log(item);
+                } else if(item.types.includes(data.item.type) && item.slot !== data.slot.nom) {
+                    let allTypesItem = item.types;
+                    alert(`L'item ${data.item.nom} ne peut pas être désassigné du slot ${data.slot.label}, mais au slot ${allTypesItem}`)
+                }
+            })
+            if(state.currentPerso && found) {
+                let emplacementIndex = state.currentPerso.emplacements.findIndex(elt => elt.nom === data.slot.nom);
+                let itemIndex = state.currentPerso.emplacements[emplacementIndex].items.findIndex(elt => elt.nom === data.item.nom);
+                state.currentPerso.emplacements[emplacementIndex].items.splice(state.currentPerso.emplacements[emplacementIndex].items[itemIndex], 1)
+                state.currentPerso.itemsAchetes.push(data.item)
+                alert(`L'item ${data.item.nom} a été retiré du slot ${data.slot.label}`)
             } else {
-                console.log("Pas de personnage courant")
+                console.log("Pas de personnage courant ou item non trouvé.")
             }
         }
     },

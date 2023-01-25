@@ -39,8 +39,8 @@
           </tr>
           <tr>
             <td><b> Or : <span style="color: goldenrod">{{ selected.or }}</span></b></td>
-              <td>
-                <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
+            <td>
+              <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
                 <CheckedList
                     :data="selected.itemsAchetes"
                     :fields="['nom','type']"
@@ -65,37 +65,31 @@
 
                 <h3><span style="color: lightgreen">ASSIGNER </span> UN OBJET</h3>
                 <select v-model="selectedItem" class="chooseselect">
-                  <option disabled value="">Sélectionner un item</option>
+                  <option disabled value="" selected>Sélectionner un item</option>
                   <option v-for="(item, index) in selected.itemsAchetes" :key="index" :value="item">{{ item.nom }}
                   </option>
                 </select>
                 <select v-model="selectedSlot" @click="assignItemToSlot(selectedItem, selectedSlot)"
                         class="assignselect">
-                  <option disabled value="">Sélectionner un emplacement</option>
+                  <option disabled value="" selected>Sélectionner un emplacement</option>
                   <option v-for="(slot, index) in slots" :key="index" :value="slot">{{ slot.label }}</option>
                 </select>
                 <br>
-                  <h3><span style="color: lightcoral">DESASSIGNER </span> UN OBJET</h3>
-                  <!--affiché dans le dropdown tous les items-->
-                  <select v-model="selectedItem" class="unassignselect">
-                    <option disabled value="">Sélectionner un item</option>
-                    <option v-for="(item, index) in selected.emplacements.item" :key="index" :value="item">{{ item.nom }}</option>
-                  </select>
+                <h3><span style="color: lightcoral">DESASSIGNER </span> UN OBJET</h3>
+                <!--affiché dans le dropdown tous les items-->
+                <select v-model="selectedItem" class="unassignselect" @change="unassignItemFromSlot(selectedItem, selectedSlot)">
+                  <option disabled value="" selected>Sélectionner un item</option>
+                  <option v-for="(item, index) in findItemsInEmplacements()" :key="index" :value="item">{{ item.nom }}</option>
+                </select>
 
-                  <select v-model="selectedSlot" @click="unassignItemFromSlot(selectedItem, selectedSlot)"
-                          class="assignselect">
-                    <option disabled value="">Sélectionner un emplacement</option>
-                    <option v-for="(slot, index) in selected.emplacements" :key="index" :value="slot">{{ slot.label }}</option>
-                  </select>
+                <select v-model="selectedSlot" @change="unassignItemFromSlot(selectedItem, selectedSlot)"
+                        class="assignselect">
+                  <option disabled value="" selected>Sélectionner un emplacement</option>
+                  <option v-for="(slot, index) in slots" :key="index" :value="slot">{{ slot.label }}</option>
+                </select>
                 <br>
-
-
-                  <li v-for="(slot, index) in slots" :key="index">
-                    {{ slot.label }} <span v-if="slot.items.length >0">[{{ slot.items.length }}]</span> :
-                    <span v-for="(item, index) in slot.items" :key="index">{{ item.nom }}, </span>
-                  </li>
-                </div>
-              </td>
+              </div>
+            </td>
           </tr>
         </v-simple-table>
       </div>
@@ -152,10 +146,11 @@ export default {
         slot = this.selected.emplacements.find(s => s.nom === 'bag')
         slot.label = 'Sac à dos'
         tab.push(slot)
+        console.log(tab)
         return tab
       }
       return []
-    },
+    }
   },
   methods: {
     showItemPrice(index) {
@@ -186,10 +181,32 @@ export default {
       }
     },
     assignItemToSlot(item, slot) {
-      this.$store.commit('assignItemToSlot', {item: item, slot: slot})
+      if (item && slot) {
+        this.$store.commit('assignItemToSlot', {item: item, slot: slot})
+        this.selectedSlot = null;
+        this.selectedItem = null;
+      }
     },
     unassignItemFromSlot(item, slot) {
-      this.$store.dispatch('unassignItemFromSlot', {item: item, slot: slot})
+      console.log('unassignItemFromSlot', item, slot);
+      if (item && slot) {
+        this.$store.dispatch('unassignItemFromSlot', {item, slot})
+        this.selectedSlot = null;
+        this.selectedItem = null;
+      }
+    },
+    findItemsInEmplacements() {
+      let currentPerso = this.selected;
+      console.log('currentPerso : ',currentPerso);
+      let items = [];
+      for (let elt of currentPerso.emplacements) {
+        if (elt.items.length > 0) {
+          for (let eltElement of elt.items) {
+            items.push(eltElement);
+          }
+        }
+      }
+      return items;
     }
   },
 }

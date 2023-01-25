@@ -4,15 +4,10 @@
       <!-- partie gauche -->
       <div style="text-align: left; width: 30%">
         <h1>Les villes</h1>
-        <label for="filteractive">Filtrage possible : </label><input type="checkbox" v-model="filterActive" id="filteractive">
-        <div v-if="filterActive">
-          <label for="filtertown">Filtre : </label><input class="townselect" :value="filter" @input="townSelected($event.target.value)" id="filtertown">
-        </div>
-        <ul>
-          <li v-for="(ville, index) in villesFiltre" :key="index">
-            <router-link :to="{ name: 'town', params: { id: index } }">{{ville.nom}}</router-link>
-          </li>
-        </ul>
+        <select v-model="selectedTown" @change="$router.push( {name: 'towns', params: { idtown: $event } })" class="persoselect">
+          <option disabled value="">Sélectionner une ville</option>
+          <option v-for="(town, index) in villes" :key="index" :value="town">{{ town.nom }}</option>
+        </select>
       </div>
       <!-- partie droite -->
       <div v-if="currentTown" style="text-align: left; width: 80%">
@@ -24,7 +19,7 @@
           </tr>
           <tr v-for="(street, index) in currentTown.rues" :key="index">
             <td>
-              <router-link :to="{ name: 'street', params: { townId: currentTown.id, streetId: street.id } }">{{street.nom}} : {{ street.boutiques.length }} boutiques</router-link>
+              <router-link :to="{ name: 'streets', params: { idtown: currentTown.id, idstreet: street.id } }">{{street.nom}} : {{ street.boutiques.length }} boutiques</router-link>
             </td>
             <td>
               <CheckedList
@@ -37,7 +32,9 @@
             </td>
           </tr>
         </v-simple-table>
-        <router-view />
+        <Shop v-if="$store.state.currentShop != null">
+
+        </Shop>
       </div>
     </div>
   </v-container>
@@ -47,6 +44,7 @@
 import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
 import CheckedList from "@/components/CheckedList";
+import {Town} from "@/datasource/model";
 
 export default {
   name: 'TownsView',
@@ -54,9 +52,13 @@ export default {
   data: () => ({
     filter: '',
     filterActive: false,
+    selectedTown: null,
     currentShop: null,
   }),
   computed: {
+    Town() {
+      return Town
+    },
     ...mapState(['villes']),
     ...mapGetters(['currentTown']),
     villesFiltre() {
@@ -75,7 +77,10 @@ export default {
     shopSelected(streetIndex, shopIndex) {
       this.currentShop = this.currentTown.rues[streetIndex].boutiques[shopIndex]
       this.$store.dispatch('setCurrentShop', this.currentShop)
-    }
+    },
+    changeRoute(evt) {
+      this.$router.push({ name: 'towns', params: { idtown: evt.target.value } })
+    },
   },
 }
 </script>

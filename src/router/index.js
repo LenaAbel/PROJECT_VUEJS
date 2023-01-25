@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import TownsView from '../views/TownsView.vue'
+import PersosView from "../views/PersosView.vue";
+import streetView from "@/components/StreetView";
+import shopView from "@/components/ShopView";
 
 Vue.use(VueRouter)
 
@@ -8,15 +11,44 @@ const routes = [
   {
     path: '/towns',
     name: 'towns',
-    component: TownsView
+    components: {
+      central : TownsView
+    },
+    children : [
+      {
+        path : ':idtown',
+        components: {
+          streets: streetView
+        },
+        props: {
+          streets: route => ({
+            idTown: route.params.idtown
+          })
+        },
+        children: [
+          {
+            path: '/streets/:idstreet',
+            components: {
+              shops: shopView
+            },
+            props: {
+              shops: route => ({
+                idTown: route.params.idtown,
+                idStreet: route.params.idstreet
+              })
+            }
+          }
+        ]
+      }
+    ]
+
   },
   {
     path: '/persos',
     name: 'persos',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/PersosView.vue')
+    components: {
+      central : PersosView
+    }
   }
 ]
 
