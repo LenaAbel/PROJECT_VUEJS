@@ -4,7 +4,7 @@
       <h1>Les boutiques </h1>
       <select v-model="selected" @change="navigateToSelectedShop" class="townselect">
         <option disabled value="">Sélectionner une boutique</option>
-        <option v-for="(shop, index) in selectedStreet" :key="index">{{ shop.nom }}</option>
+        <option v-for="(shop, index) in selectedStreet.boutiques" :key="index">{{ shop.nom }}</option>
       </select>
     </div>
 
@@ -40,7 +40,7 @@ export default {
   name: "ShopView",
   props: {
     idTown: Number,
-    idstreet: Number
+    idStreet: Number
   },
   data: () => ({
     filter: '',

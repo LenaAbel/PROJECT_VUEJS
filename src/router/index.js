@@ -27,7 +27,7 @@ const routes = [
         },
         children: [
           {
-            path: ':idstreet',
+            path: 'streets/:idstreet',
             name: 'shops',
             components: {
               shops: shopView

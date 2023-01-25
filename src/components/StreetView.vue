@@ -29,15 +29,17 @@ export default {
     ...mapState(['villes']),
     ...mapGetters(['getCurrentTown']),
     selectedTown() {
-      console.log('idtown = ', this.idTown);
+      // console.log('idtown = ', this.idTown);
       return this.villes.find(v => v._id === this.idTown)
     }
   },
   methods: {
     navigateToSelectedStreet(){
       console.log('selected street=',this.selected)
-      this.$store.dispatch('setCurrentStreet', this.villes.find(element => element.nom === this.selected))
-      this.$router.push({name: 'shops', params: {idstreet: this.selected}})
+      console.log(this.villes.find(element => element._id == this.getCurrentTown._id).rues.find(element => element.nom == this.selected));
+      let currentStreet = this.villes.find(element => element._id == this.getCurrentTown._id).rues.find(element => element.nom == this.selected)
+      this.$store.dispatch('setCurrentStreet', currentStreet)
+      this.$router.push({name: 'shops', params: {idstreet: currentStreet._id}})
     }
   },
 }
