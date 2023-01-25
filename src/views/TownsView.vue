@@ -4,22 +4,22 @@
       <!-- partie gauche -->
       <div style="text-align: left; width: 30%">
         <h1>Les villes</h1>
-        <select v-model="selectedTown" @change="$router.push( {name: 'towns', params: { idtown: $event } })" class="persoselect">
+        <select v-model="selected"  @change="navigateToSelectedTown"  class="townselect" >
           <option disabled value="">Sélectionner une ville</option>
-          <option v-for="(town, index) in villes" :key="index" :value="town">{{ town.nom }}</option>
+          <option v-for="(ville, index) in villesFiltre" :key="index">{{ville.nom}}</option>
         </select>
       </div>
       <!-- partie droite -->
-      <div v-if="currentTown" style="text-align: left; width: 80%">
-        <h1>{{currentTown.nom.toUpperCase()}}</h1>
+      <div v-if="idtown" style="text-align: left; width: 80%">
+        <router-view> </router-view>
+        <h1>{{getCurrentTown.nom.toUpperCase()}}</h1>
         <v-simple-table>
           <tr class="text-center">
-            <th>Rues: {{currentTown.rues.length}}</th>
+            <th>Rues: {{getCurrentTown.rues.length}}</th>
             <th>Boutiques</th>
           </tr>
-          <tr v-for="(street, index) in currentTown.rues" :key="index">
+          <tr v-for="(street, index) in getCurrentTown.rues" :key="index">
             <td>
-              <router-link :to="{ name: 'streets', params: { idtown: currentTown.id, idstreet: street.id } }">{{street.nom}} : {{ street.boutiques.length }} boutiques</router-link>
             </td>
             <td>
               <CheckedList
@@ -32,9 +32,7 @@
             </td>
           </tr>
         </v-simple-table>
-        <Shop v-if="$store.state.currentShop != null">
-
-        </Shop>
+        <router-view />
       </div>
     </div>
   </v-container>
@@ -44,23 +42,23 @@
 import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
 import CheckedList from "@/components/CheckedList";
-import {Town} from "@/datasource/model";
 
 export default {
   name: 'TownsView',
   components: {CheckedList},
+  props: {
+    idtown: Number
+  },
   data: () => ({
     filter: '',
     filterActive: false,
-    selectedTown: null,
     currentShop: null,
+    currentTown: null,
+    selected: null,
   }),
   computed: {
-    Town() {
-      return Town
-    },
     ...mapState(['villes']),
-    ...mapGetters(['currentTown']),
+    ...mapGetters(['getCurrentTown']),
     villesFiltre() {
       if (this.filterActive) {
         return this.villes.filter(v => v.nom.match(this.filter))
@@ -78,9 +76,11 @@ export default {
       this.currentShop = this.currentTown.rues[streetIndex].boutiques[shopIndex]
       this.$store.dispatch('setCurrentShop', this.currentShop)
     },
-    changeRoute(evt) {
-      this.$router.push({ name: 'towns', params: { idtown: evt.target.value } })
-    },
+    navigateToSelectedTown(){
+      console.log(this.selected)
+      this.$store.dispatch('setCurrentTown', this.villesFiltre.find(element => element.nom == this.selected))
+      this.$router.push({ name: 'town', params: { idtown: this.villesFiltre.find(element => element.nom == this.selected)._id } });
+    }
   },
 }
 </script>
