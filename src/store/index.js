@@ -16,6 +16,8 @@ export default new Vuex.Store({
         currentPerso: null,
         currentShop: null,
         currentItem: null,
+        currentTown: null,
+        currentStreet: null,
     }),
     // mutations = fonctions synchrones pour mettre à jour le state (!!! interdit de modifier directement le state)
     mutations: {
@@ -33,6 +35,13 @@ export default new Vuex.Store({
         },
         setCurrentItem(state, item) {
             state.currentItem = item
+        },
+        setCurrentTown(state, town) {
+            console.log(town);
+            state.currentTown = town
+        },
+        setCurrentStreet(state, street) {
+            state.currentStreet = street
         },
         // ne vérifie pas l'or possédé par le personnage courant,
         // ajouter l'item passé en paramètre à la liste itemAchetes du personnage courant,
@@ -155,6 +164,12 @@ export default new Vuex.Store({
         async setCurrentItem({commit}, item) {
             commit("setCurrentItem", item)
         },
+        async setCurrentTown({commit}, town) {
+            commit("setCurrentTown", town)
+        },
+        async setCurrentStreet({commit}, street) {
+            commit("setCurrentStreet", street)
+        },
         async buyingItem({commit}, item) {
             console.log("BUYING ITEM")
             commit("sell", item)
@@ -188,6 +203,10 @@ export default new Vuex.Store({
         // Renvoyer la quantitié d'or du perso courant ou bien 0 si pas de perso courant
         currentGoldPerso(state) {
             return state.currentPerso ? state.currentPerso.or : 0;
+        },
+        getCurrentTown(state) {
+            console.log(state.currentTown);
+            return state.currentTown
         }
     }
 })

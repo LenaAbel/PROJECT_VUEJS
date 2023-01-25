@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import TownsView from '../views/TownsView.vue'
 import PersosView from "../views/PersosView.vue";
-import streetView from "@/components/StreetView";
+import StreetsView from "@/components/StreetView";
 import shopView from "@/components/ShopView";
 
 Vue.use(VueRouter)
@@ -17,8 +17,9 @@ const routes = [
     children : [
       {
         path : ':idtown',
+        name: 'streets',
         components: {
-          streets: streetView
+          streets: StreetsView
         },
         props: {
           streets: route => ({
@@ -28,6 +29,7 @@ const routes = [
         children: [
           {
             path: '/streets/:idstreet',
+            name: 'shops',
             components: {
               shops: shopView
             },
