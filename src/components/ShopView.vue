@@ -2,13 +2,15 @@
   <v-container>
     <div style="text-align: left; width: 50%">
       <h1>Les boutiques </h1>
-      <select v-model="selected" @change="navigateToSelectedShop" class="townselect">
+      <select v-model="selected" @change="setShop" class="townselect">
         <option disabled value="">Sélectionner une boutique</option>
         <option v-for="(shop, index) in selectedStreet.boutiques" :key="index">{{ shop.nom }}</option>
       </select>
     </div>
-
-    <div v-if="selected" style="text-align: left; width: 80%">
+    <div v-if="selected">
+        <ShopDetails :shop="getCurrentShop"></ShopDetails>
+    </div>
+    <!-- <div v-if="selected" style="text-align: left; width: 80%">
       <h1>{{ getCurrentTown.nom.toUpperCase() }}</h1>
       <v-simple-table>
         <tr class="text-center">
@@ -29,18 +31,22 @@
           </td>
         </tr>
       </v-simple-table>
-    </div>
+    </div> -->
   </v-container>
 </template>
 
 <script>
 import {mapGetters, mapState} from "vuex";
+import ShopDetails from "../components/ShopDetails.vue";
 
 export default {
   name: "ShopView",
   props: {
     idTown: Number,
     idStreet: Number
+  },
+  components: {
+    ShopDetails
   },
   data: () => ({
     filter: '',
@@ -50,7 +56,7 @@ export default {
   }),
   computed: {
     ...mapState(['villes']),
-    ...mapGetters(['getCurrentStreet', 'getCurrentTown']),
+    ...mapGetters(['getCurrentStreet', 'getCurrentShop', 'getCurrentTown']),
     selectedStreet() {
       console.log('idstreet = ', this.idStreet);
       return this.getCurrentTown.rues.find(r => r._id === this.idStreet);
@@ -65,11 +71,10 @@ export default {
       this.currentShop = this.currentTown.rues[streetIndex].boutiques[shopIndex]
       this.$store.dispatch('setCurrentShop', this.currentShop)
     },
-    navigateToSelectedShop() {
-      console.log('navigateToSelectedShop = ' + this.selected);
-      this.$store.dispatch('setCurrentShop', this.selectedStreet.find(element => element.nom === this.selected))
-      this.$router.push({name: 'shops', params: {idstreet: this.selected}})
-      }
+    setShop() {
+      console.log(this.getCurrentStreet.boutiques.find(element => element.nom == this.selected));
+      this.$store.dispatch('setCurrentShop', this.getCurrentStreet.boutiques.find(element => element.nom == this.selected))
+    }
   },
 }
 </script>
