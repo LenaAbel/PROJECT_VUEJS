@@ -119,9 +119,6 @@ export default new Vuex.Store({
                 if (item.types.includes(data.item.type) && item.slot === data.slot.nom){
                     found = true;
                     console.log(item);
-                } else if(item.types.includes(data.item.type) && item.slot !== data.slot.nom) {
-                    let allTypesItem = item.types;
-                    alert(`L'item ${data.item.nom} ne peut pas être désassigné du slot ${data.slot.label}, mais au slot ${allTypesItem}`)
                 }
             })
             if(state.currentPerso && found) {

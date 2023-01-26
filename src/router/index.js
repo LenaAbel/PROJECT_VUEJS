@@ -58,7 +58,7 @@ const routes = [
         name: 'slot',
         components: { slot: SlotEdit},
         props: {
-            slot: route => ({ slotName: route.params.name})
+          slot: route => ({ slotName: route.params.name})
         }
       }
     ]

@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <div>{{  getCurrentPerso }}</div>
     <h1>{{ selected.nom }}</h1>
     <v-simple-table>
       <tr class="text-center">
@@ -18,17 +17,13 @@
           </ul>
         </td>
         <td>
-          <div v-for="(slot, index) in slots" :key="index">
-            <v-btn  @click="navigateToSlot(slot.nom)" :key="index">{{ slot.label }}</v-btn>
-          </div>
-          <div v-if="slotButton">
-            <router-view name="slot"></router-view>
-        </div>
+
           <ul>
-            <li v-for="(slot, index) in slots" :key="index">
-              {{ slot.label }} <span v-if="slot.items.length >0">[{{ slot.items.length }}]</span> :
+            <ul v-for="(slot, index) in slots" :key="index">
+<!--              {{ slot.label }} <span v-if="slot.items.length >0">[{{ slot.items.length }}]</span> :-->
+              <v-btn style="margin: 10px" @click="navigateToSlot(slot.nom)" :key="index">{{ slot.label }}</v-btn>
               <span v-for="(item, index) in slot.items" :key="index">{{ item.nom }}, </span>
-            </li>
+            </ul>
           </ul>
         </td>
       </tr>
@@ -70,23 +65,10 @@
               <option v-for="(slot, index) in slots" :key="index" :value="slot">{{ slot.label }}</option>
             </select>
             <br>
-            <router-view name="slot"></router-view>
-            <!--
-            <h3><span style="color: lightcoral">DESASSIGNER </span> UN OBJET</h3>
-            &lt;!&ndash;affiché dans le dropdown tous les items&ndash;&gt;
-            <select v-model="selectedItem" class="unassignselect"
-                    @change="unassignItemFromSlot(selectedItem, selectedSlot)">
-              <option disabled value="" selected>Sélectionner un item</option>
-              <option v-for="(item, index) in findItemsInEmplacements()" :key="index" :value="item">{{item.nom}}
-              </option>
-            </select>
 
-            <select v-model="selectedSlot" @change="unassignItemFromSlot(selectedItem, selectedSlot)"
-                    class="assignselect">
-              <option disabled value="" selected>Sélectionner un emplacement</option>
-              <option v-for="(slot, index) in slots" :key="index" :value="slot">{{ slot.label }}</option>
-            </select>
-            <br>-->
+            <div v-if="navigateToSlot">
+              <router-view name="slot"></router-view>
+            </div>
           </div>
         </td>
       </tr>
@@ -145,7 +127,6 @@ export default {
         slot = this.selected.emplacements.find(s => s.nom === 'bag')
         slot.label = 'Sac à dos'
         tab.push(slot)
-        console.log(tab)
         return tab
       }
       return []

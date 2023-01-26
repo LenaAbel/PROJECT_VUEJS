@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-btn v-for="(but, index) in titles" :key="index" :color="but.color" @click="navigate(but.path)">
-      {{but.text}}
-    </v-btn>
+    <span v-for="(but, index) in titles" :key="index" :color="but.color" @click="goTo(index)">
+      <slot name="link-to" :link="but"></slot>
+    </span>
   </div>
 </template>
 
@@ -13,6 +13,10 @@ export default {
   methods: {
     navigate(path) {
       this.$router.push(path)
+    },
+    goTo(index) {
+      this.$emit('menu-clicked', index);
+      this.navigate(this.titles[index].path);
     }
   }
 }

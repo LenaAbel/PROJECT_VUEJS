@@ -110,7 +110,6 @@ export default {
       }
     },
     unassignItemFromSlot(item, slot) {
-      console.log('unassignItemFromSlot', item, slot);
       if (item && slot) {
         this.$store.dispatch('unassignItemFromSlot', {item, slot})
         this.selectedSlot = null;
@@ -119,7 +118,6 @@ export default {
     },
     findItemsInEmplacements() {
       let currentPerso = this.selected;
-      console.log('currentPerso : ',currentPerso);
       let items = [];
       for (let elt of currentPerso.emplacements) {
         if (elt.items.length > 0) {

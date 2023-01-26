@@ -8,7 +8,7 @@
       </select>
     </div>
     <div v-if="selected">
-        <ShopDetails :shop="getCurrentShop"></ShopDetails>
+      <ShopDetails :shop="getCurrentShop"></ShopDetails>
     </div>
     <br>
   </div>

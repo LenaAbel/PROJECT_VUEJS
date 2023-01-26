@@ -38,8 +38,6 @@ export default {
   },
   methods: {
     navigateToSelectedStreet() {
-      console.log('selected street=', this.selected)
-      console.log(this.villes.find(element => element._id === this.getCurrentTown._id).rues.find(element => element.nom == this.selected));
       let currentStreet = this.villes.find(element => element._id === this.getCurrentTown._id).rues.find(element => element.nom == this.selected)
       this.$store.dispatch('setCurrentStreet', currentStreet)
       this.$router.push({name: 'shops', params: {idstreet: currentStreet._id}})

@@ -5,7 +5,11 @@
         color="primary"
         dark
     >
-      <NavBar :titles="titles"></NavBar>
+      <NavBar :titles="titles">
+        <template #link-to="link">
+          <v-btn :color="link.link.color">{{link.link.text}}</v-btn>
+        </template>
+      </NavBar>
     </v-app-bar>
 
     <v-main>
