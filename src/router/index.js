@@ -4,7 +4,8 @@ import TownsView from '../views/TownsView.vue'
 import PersosView from "../views/PersosView.vue";
 import StreetsView from "@/components/StreetView";
 import shopView from "@/components/ShopView";
-import PersoCaracs from "@/components/PersoCaracs.vue";
+import SlotEdit from "@/components/SlotEdit.vue";
+
 
 Vue.use(VueRouter)
 
@@ -54,10 +55,10 @@ const routes = [
     children : [
       {
         path: 'slot/:name',
-        name: 'slots',
-        components: PersoCaracs,
+        name: 'slot',
+        components: { slot: SlotEdit},
         props: {
-            slot: route => ({ name: route.params.name})
+            slot: route => ({ slotName: route.params.name})
         }
       }
     ]

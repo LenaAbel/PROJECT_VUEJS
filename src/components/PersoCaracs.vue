@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <div>{{  getCurrentPerso }}</div>
     <h1>{{ selected.nom }}</h1>
     <v-simple-table>
       <tr class="text-center">
@@ -18,8 +19,11 @@
         </td>
         <td>
           <div v-for="(slot, index) in slots" :key="index">
-            <v-btn  @click="navigateToSlot(slot.label)" :key="index">{{ slot.label }}</v-btn>
+            <v-btn  @click="navigateToSlot(slot.nom)" :key="index">{{ slot.label }}</v-btn>
           </div>
+          <div v-if="slotButton">
+            <router-view name="slot"></router-view>
+        </div>
           <ul>
             <li v-for="(slot, index) in slots" :key="index">
               {{ slot.label }} <span v-if="slot.items.length >0">[{{ slot.items.length }}]</span> :
@@ -65,7 +69,9 @@
               <option disabled value="" selected>Sélectionner un emplacement</option>
               <option v-for="(slot, index) in slots" :key="index" :value="slot">{{ slot.label }}</option>
             </select>
-            <br><!--
+            <br>
+            <router-view name="slot"></router-view>
+            <!--
             <h3><span style="color: lightcoral">DESASSIGNER </span> UN OBJET</h3>
             &lt;!&ndash;affiché dans le dropdown tous les items&ndash;&gt;
             <select v-model="selectedItem" class="unassignselect"
@@ -90,21 +96,24 @@
 
 <script>
 import CheckedList from "@/components/CheckedList.vue";
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapState, mapGetters} from "vuex";
 
 export default {
   name: "PersoCaracs",
   components: {CheckedList},
+  props: {
+    selected: Object
+  },
   data: () => ({
-    selected: null,
     idSelectedBoughtItems: [], // ce tableau ne contient que les ids des items achetés sélectionnés.
     selectedItem: null,
     selectedSlot: null,
-
+    slotButton: null,
   }),
   computed: {
     ...mapState(['persos']),
     ...mapActions(["setCurrentPerso"]),
+    ...mapGetters(['getCurrentPerso']),
     checkedBoughtItems() {
       if (this.selected === null) return []
       // construit un tableau contenant autant de cases qu'il y a d'items achetés
@@ -199,8 +208,8 @@ export default {
       return items;
     },
     navigateToSlot(slotName) {
-
-      this.$router.push({name: 'slots', params: {name: slotName}})}
+      console.log(slotName);
+      this.$router.push({name: 'slot', params: {name: slotName}})}
   },
 }
 </script>

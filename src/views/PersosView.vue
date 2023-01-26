@@ -11,8 +11,8 @@
         </select>
       </div>
       <!-- partie droite -->
-      <div v-if="$store.state.currentPerso != null" style="text-align: left; width: 80%">
-        <PersoCaracs :selected="$store.state.currentPerso" :slots="slots"></PersoCaracs>
+      <div v-if="getCurrentPerso != null" style="text-align: left; width: 80%">
+        <PersoCaracs :selected="getCurrentPerso" ></PersoCaracs>
       </div>
     </div>
   </v-container>
@@ -20,7 +20,7 @@
 
 <script>
 
-import {mapActions, mapState} from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
 import PersoCaracs from '@/components/PersoCaracs'
 
 export default {
@@ -36,6 +36,7 @@ export default {
   computed: {
     ...mapState(['persos']),
     ...mapActions(["setCurrentPerso"]),
+    ...mapGetters(['getCurrentPerso']),
     checkedBoughtItems() {
       if (this.selected === null) return []
       // construit un tableau contenant autant de cases qu'il y a d'items achetés

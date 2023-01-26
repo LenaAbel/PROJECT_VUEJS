@@ -215,6 +215,10 @@ export default new Vuex.Store({
         getCurrentShop(state) {
             console.log('getCurrentShop', state.currentShop);
             return state.currentShop
+        },
+        getCurrentPerso(state) {
+            console.log('getCurrentPerso', state.currentPerso);
+            return state.currentPerso
         }
     }
 })
