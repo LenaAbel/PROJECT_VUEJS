@@ -10,6 +10,16 @@
       </tr>
       <tr>
         <td>
+<!--          <CheckedList
+            :data="shop.itemStock"
+            :itemCheck="true"
+            :checked="checkedStock"
+            :itemButton="itemButton"
+            :listButton="listButton"
+            @checked-changed="checkedChanged"
+            @item-button-clicked="itemButtonClicked"
+            @list-button-clicked="listButtonClicked"
+            ></CheckedList>-->
           <CheckedList
               :data="itemsStock"
               :fields="['text']"
