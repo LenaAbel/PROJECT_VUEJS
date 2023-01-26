@@ -13,29 +13,6 @@
       <div v-if="selected">
         <router-view name="streets"></router-view>
       </div>
-
-<!--    <div v-if="selected" style="text-align: left; width: 80%">
-        <h1>{{getCurrentTown.nom.toUpperCase()}}</h1>
-        <v-simple-table>
-          <tr class="text-center">
-            <th>Rues: {{getCurrentTown.rues.length}}</th>
-            <th>Boutiques</th>
-          </tr>
-          <tr v-for="(street, index) in getCurrentTown.rues" :key="index">
-            <td>
-            </td>
-            <td>
-              <CheckedList
-                  :data="street.boutiques"
-                  :fields="['nom']"
-                  :item-button="{show: true, text: 'select'}"
-                  @item-button-clicked="shopSelected(index, $event)"
-              >
-              </CheckedList>
-            </td>
-          </tr>
-        </v-simple-table>
-      </div>-->
     </div>
   </v-container>
 </template>
@@ -43,11 +20,9 @@
 <script>
 import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
-//import CheckedList from "@/components/CheckedList";
 
 export default {
   name: 'TownsView',
-  //components: {CheckedList},
   props: {
     idtown: Number
   },

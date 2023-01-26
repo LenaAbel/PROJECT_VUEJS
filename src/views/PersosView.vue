@@ -11,87 +11,8 @@
         </select>
       </div>
       <!-- partie droite -->
-      <div v-if="selected" style="text-align: left; width: 80%">
-        <h1>{{ selected.nom }}</h1>
-        <v-simple-table>
-          <tr class="text-center">
-            <th>Attributs</th>
-            <th>Emplacements</th>
-          </tr>
-          <tr>
-            <td>
-              <ul>
-                <li><span style="color: darkblue"><b>Niveau :</b></span>{{ selected.niveau }}</li>
-                <li><span style="color: green"><b>Vie :</b></span>{{ selected.attributs.vie }}</li>
-                <li><b><span style="color: chocolate">Vitalité :</span></b> {{ selected.attributs.vitalite }}</li>
-                <li><b><span style="color: red">Force :</span></b> {{ selected.attributs.force }}</li>
-                <li><b><span style="color: dimgrey">Armure :</span></b> {{ selected.attributs.protection }}</li>
-              </ul>
-            </td>
-            <td>
-              <ul>
-                <li v-for="(slot, index) in slots" :key="index">
-                  {{ slot.label }} <span v-if="slot.items.length >0">[{{ slot.items.length }}]</span> :
-                  <span v-for="(item, index) in slot.items" :key="index">{{ item.nom }}, </span>
-                </li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><b> Or : <span style="color: goldenrod">{{ selected.or }}</span></b></td>
-            <td>
-              <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
-                <CheckedList
-                    :data="selected.itemsAchetes"
-                    :fields="['nom','type']"
-                    :checked="checkedBoughtItems"
-                    item-check
-                    :item-button="{show: true, text: 'price'}"
-                    :list-button="{show: true, text: 'Infos'}"
-                    @checked-changed="toggleItem"
-                    @item-button-clicked="showItemPrice"
-                    @list-button-clicked="showItemsInfo"
-                >
-                </CheckedList>
-                <br>
-
-                <h3>Sélectionner un item à revendre :</h3>
-                <select v-model="selectedItem" @change="resellItems()" class="persoselect">
-                  <option disabled value="">Sélectionner un item</option>
-                  <option v-for="(item, index) in selected.itemsAchetes" :key="index" :value="item">{{ item.nom }}
-                  </option>
-                </select>
-
-
-                <h3><span style="color: lightgreen">ASSIGNER </span> UN OBJET</h3>
-                <select v-model="selectedItem" class="chooseselect">
-                  <option disabled value="" selected>Sélectionner un item</option>
-                  <option v-for="(item, index) in selected.itemsAchetes" :key="index" :value="item">{{ item.nom }}
-                  </option>
-                </select>
-                <select v-model="selectedSlot" @click="assignItemToSlot(selectedItem, selectedSlot)"
-                        class="assignselect">
-                  <option disabled value="" selected>Sélectionner un emplacement</option>
-                  <option v-for="(slot, index) in slots" :key="index" :value="slot">{{ slot.label }}</option>
-                </select>
-                <br>
-                <h3><span style="color: lightcoral">DESASSIGNER </span> UN OBJET</h3>
-                <!--affiché dans le dropdown tous les items-->
-                <select v-model="selectedItem" class="unassignselect" @change="unassignItemFromSlot(selectedItem, selectedSlot)">
-                  <option disabled value="" selected>Sélectionner un item</option>
-                  <option v-for="(item, index) in findItemsInEmplacements()" :key="index" :value="item">{{ item.nom }}</option>
-                </select>
-
-                <select v-model="selectedSlot" @change="unassignItemFromSlot(selectedItem, selectedSlot)"
-                        class="assignselect">
-                  <option disabled value="" selected>Sélectionner un emplacement</option>
-                  <option v-for="(slot, index) in slots" :key="index" :value="slot">{{ slot.label }}</option>
-                </select>
-                <br>
-              </div>
-            </td>
-          </tr>
-        </v-simple-table>
+      <div v-if="$store.state.currentPerso != null" style="text-align: left; width: 80%">
+        <PersoCaracs :selected="$store.state.currentPerso" :slots="slots"></PersoCaracs>
       </div>
     </div>
   </v-container>
@@ -100,11 +21,11 @@
 <script>
 
 import {mapActions, mapState} from 'vuex'
-import CheckedList from "@/components/CheckedList";
+import PersoCaracs from '@/components/PersoCaracs'
 
 export default {
   name: 'PersosView',
-  components: {CheckedList},
+  components: {PersoCaracs},
   data: () => ({
     selected: null,
     idSelectedBoughtItems: [], // ce tableau ne contient que les ids des items achetés sélectionnés.
@@ -215,19 +136,5 @@ export default {
 <style>
 .persoselect {
   background-color: lightgray;
-}
-
-.assignselect {
-  background-color: lightblue;
-  margin-left: 3px;
-}
-
-.chooseselect {
-  background-color: lightgreen;
-}
-
-.unassignselect {
-  background-color: lightcoral;
-  margin-bottom: 5px;
 }
 </style>

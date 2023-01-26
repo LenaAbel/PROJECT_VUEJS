@@ -4,6 +4,7 @@ import TownsView from '../views/TownsView.vue'
 import PersosView from "../views/PersosView.vue";
 import StreetsView from "@/components/StreetView";
 import shopView from "@/components/ShopView";
+import PersoCaracs from "@/components/PersoCaracs.vue";
 
 Vue.use(VueRouter)
 
@@ -49,7 +50,17 @@ const routes = [
     name: 'persos',
     components: {
       central : PersosView
-    }
+    },
+    children : [
+      {
+        path: 'slot/:name',
+        name: 'slots',
+        components: PersoCaracs,
+        props: {
+            slot: route => ({ name: route.params.name})
+        }
+      }
+    ]
   }
 ]
 

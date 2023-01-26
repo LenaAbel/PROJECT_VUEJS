@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <div style="text-align: left; width: 50%">
+  <div style="height: 150px; width: 800px;">
+    <div style="text-align: left; width: 90%; margin-left: 70px">
       <h1>Les boutiques </h1>
       <select v-model="selected" @change="setShop" class="townselect">
         <option disabled value="">Sélectionner une boutique</option>
@@ -10,29 +10,8 @@
     <div v-if="selected">
         <ShopDetails :shop="getCurrentShop"></ShopDetails>
     </div>
-    <!-- <div v-if="selected" style="text-align: left; width: 80%">
-      <h1>{{ getCurrentTown.nom.toUpperCase() }}</h1>
-      <v-simple-table>
-        <tr class="text-center">
-          <th>Rues: {{ getCurrentTown.rues.length }}</th>
-          <th>Boutiques</th>
-        </tr>
-        <tr v-for="(street, index) in getCurrentTown.rues" :key="index">
-          <td>
-          </td>
-          <td>
-            <CheckedList
-                :data="street.boutiques"
-                :fields="['nom']"
-                :item-button="{show: true, text: 'select'}"
-                @item-button-clicked="shopSelected(index, $event)"
-            >
-            </CheckedList>
-          </td>
-        </tr>
-      </v-simple-table>
-    </div> -->
-  </v-container>
+    <br>
+  </div>
 </template>
 
 <script>
