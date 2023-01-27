@@ -10,17 +10,41 @@
       </tr>
       <tr>
         <td>
-<!--          <CheckedList
-            :data="shop.itemStock"
+          <CheckedList 
+            :data="itemsStock" 
+            :fields="['text']" 
+            :checked="checkedItemsStock" 
+            item-check 
+            item-button=true
+            :list-button=true 
+            @checked-changed="toggleItemStock" 
+            @item-button-clicked="buyOneItem"
+            @list-button-clicked="buySelectedItems"> 
+            <template v-slot:list-button>
+              <v-btn color="green" @click="buySelectedItems">
+                Buy all 
+              </v-btn> 
+            </template> 
+            <template v-slot:item="{item}">
+              <div>{{item.text}}</div>
+            </template>
+            <template v-slot:item-button="{item, index}">
+              <v-btn :color="index % 2 === 0 ? 'red': 'blue'" @click="buyOneItem(item)">
+                Buy
+              </v-btn> 
+            </template>
+          </CheckedList>
+         <!-- <CheckedList
+            :data="itemStock"
             :itemCheck="true"
-            :checked="checkedStock"
-            :itemButton="itemButton"
-            :listButton="listButton"
-            @checked-changed="checkedChanged"
-            @item-button-clicked="itemButtonClicked"
-            @list-button-clicked="listButtonClicked"
-            ></CheckedList>-->
-          <CheckedList
+            :checked="checkedItemsStock"
+            :itemButton=true
+            :listButton=true
+            @checked-changed="toggleItemStock"
+            @item-button-clicked="buyOneItem"
+            @list-button-clicked="buySelectedItems"
+            ></CheckedList> -->
+          <!-- <CheckedList
               :data="itemsStock"
               :fields="['text']"
               :checked="checkedItemsStock"
@@ -31,15 +55,23 @@
               @item-button-clicked="buyOneItem"
               @list-button-clicked="buySelectedItems"
           >
-          </CheckedList>
+          </CheckedList> -->
         </td>
         <td>
           <CheckedList
               :data="itemsCommande"
               :fields="['text']"
-              :item-button="{show: true, text: 'commander'}"
+              :item-button=true
               @item-button-clicked="orderOneItem"
           >
+            <template v-slot:item="{item}">
+              <div>{{item.text}}</div>
+            </template>
+            <template v-slot:item-button="{item, index}">
+              <v-btn :color="index % 2 === 0 ? 'red': 'blue'" @click="orderOneItem(item)">
+                Order
+              </v-btn> 
+            </template>
           </CheckedList>
         </td>
       </tr>
@@ -72,10 +104,15 @@ export default {
     // puisque les : et le po sont des données statiques externes aux tableaux d'items de la boutique.
     // C'est pourpqui les 2 fonctions suivantes recalculent un noveau tableau avec le texte qui va bien.
     itemsStock() {
-      return this.shop.itemStock.map(e => ({text: e.nom+' : '+e.prix+' po'}) )
+      console.log(this.shop.itemStock.map(e => ({text: e.nom+' : '+e.prix+' po'}) ));
+      return this.shop.itemStock.map(e => ({text: e.nom+' : '+e.prix+' po', nom: e.nom}) )
     },
     itemsCommande() {
-      return this.shop.itemCommande.map(e => ({text: e.nom+' : '+e.prix+' po'}) )
+      console.log(this.shop.itemCommande)
+      return this.shop.itemCommande.map(e => {
+        e.time = (Math.floor(Math.random() * 8000) + 2000)/1000
+        return {text: e.nom+' : '+ e.time +' secondes', nom: e.nom, time: e.time}
+      })
     }
   },
   methods: {
@@ -90,10 +127,10 @@ export default {
         this.idSelectedItemsStock.splice(id,1)
       }
     },
-    buyOneItem(index) {
-      if (this.shop.itemStock[index].prix <= this.$store.getters.currentGoldPerso) {
-        this.$store.dispatch("buyingItem", this.shop.itemStock[index])
-        console.log('achat de ' + this.shop.itemStock[index].nom)
+    buyOneItem(itemName) {
+      if (this.shop.itemStock.find(element => element.nom == itemName.nom).prix <= this.$store.getters.currentGoldPerso) {
+        this.$store.dispatch("buyingItem",this.shop.itemStock.find(element => element.nom == itemName.nom))
+        console.log('achat de ' + this.shop.itemStock.find(element => element.nom == itemName.nom).nom)
       } else {
         alert('Vous n\'avez pas assez d\'argent pour acheter cet objet.')
       }
@@ -115,10 +152,10 @@ export default {
     // Lorsqu'une boutique est choisie, on peut cliquer sur les boutons des items à commander.
     // Dans ce cas, un message d'alerte indique dans combien de secondes l'item sera disponible à la vente, ce temps étant tiré aléatoirement entre 2 et 10 secondes.
     // Cette opération ne devant pas bloquer le navigateur, il faut qu'elle soit implémentée sous la forme d'une action + mutation dans le store.
-    orderOneItem(index) {
-      let time = Math.floor(Math.random() * 8000) + 2000;
-      if(confirm(`L'item sera disponible dans ${time/1000} secondes. Voulez-vous continuer?`)){
-        this.$store.dispatch('order', { time, item: this.shop.itemCommande[index] })
+    orderOneItem(itemName) {
+      let time = itemName.time
+      if(confirm(`L'item sera disponible dans ${itemName.time} secondes. Voulez-vous continuer?`)){
+        this.$store.dispatch('order', { time, item: this.shop.itemCommande.find(e => e.nom == itemName.nom) })
       }
     },
   },

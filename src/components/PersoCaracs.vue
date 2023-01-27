@@ -31,7 +31,7 @@
         <td><b> Or : <span style="color: goldenrod">{{ selected.or }}</span></b></td>
         <td>
           <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
-            <CheckedList
+            <!-- <CheckedList
                 :data="selected.itemsAchetes"
                 :fields="['nom','type']"
                 :checked="checkedBoughtItems"
@@ -42,7 +42,32 @@
                 @item-button-clicked="showItemPrice"
                 @list-button-clicked="showItemsInfo"
             >
-            </CheckedList>
+            </CheckedList> -->
+            <CheckedList
+              :data="selected.itemsAchetes"
+              :fields="['nom', 'type']"
+              :checked="checkedBoughtItems"
+              item-check
+              :item-button=true
+              :list-button=true
+              @checked-changed="toggleItem"
+              @item-button-clicked="showItemPrice"
+              @list-button-clicked="showItemsInfo"
+          >
+            <template v-slot:list-button>
+              <v-btn color="green" @click="showItemsInfo">
+                Infos
+              </v-btn> 
+            </template> 
+            <template v-slot:item="{item}">
+              <div>{{item.nom}} : {{ item.type }}</div>
+            </template>
+            <template v-slot:item-button="{item}">
+              <v-btn color="blue" @click="showItemPrice(item)">
+                Prix
+              </v-btn> 
+            </template>
+          </CheckedList>
             <br>
 
             <h3>Sélectionner un item à revendre :</h3>
@@ -133,8 +158,8 @@ export default {
     }
   },
   methods: {
-    showItemPrice(index) {
-      alert(this.selected.itemsAchetes[index].nom + ' : ' + this.selected.itemsAchetes[index].prix)
+    showItemPrice(itemName) {
+      alert(this.selected.itemsAchetes.find(e => e.nom == itemName.nom).nom + ' : ' + this.selected.itemsAchetes.find(e => e.nom == itemName.nom).prix)
     },
     showItemsInfo() {
       let items = ""

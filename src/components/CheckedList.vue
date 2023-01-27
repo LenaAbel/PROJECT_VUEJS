@@ -1,19 +1,17 @@
 <template>
   <div>
-    <p v-for="(item, indexRow) in data" :key="indexRow">
-      <input type="checkbox"
-             v-if="itemCheck"
-             :checked="checked[indexRow]"
-             @click="$emit('checked-changed',indexRow)">
-      <slot name="item" :item="item" :indexRow="indexRow" v-for="(field, index) in fields" :key="index">
-        {{item[field]}}
-      </slot>
-      <span v-if="itemButton && itemButton.show" color="blue"  @click="$emit('item-button-clicked',indexRow)"><slot name="item-button" :item="item" :indexRow="indexRow">{{itemButton.text}}</slot></span>
+    <p v-for="(item, indexRow) in data" :key="indexRow" class="d-flex">
+      <input type="checkbox" v-if="itemCheck" :checked="checked[indexRow]" @click="$emit('checked-changed', indexRow)">
+      <slot name="item" :item="item" :index="indexRow"></slot>
+      <span>
+        <slot name="item-button" :item="item" :index="indexRow"></slot>
+      </span>
     </p>
-    <span v-if="listButton && listButton.show" color="green" @click="$emit('list-button-clicked')"><slot name="list-button">{{listButton.text}}</slot></span>
+    <span>
+      <slot name="list-button"></slot>
+    </span>
   </div>
 </template>
-
 <script>
 export default {
   name: "CheckedList",
