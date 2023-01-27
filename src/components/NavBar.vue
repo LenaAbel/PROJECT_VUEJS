@@ -4,6 +4,7 @@
       <slot name="link-to" :link="but"></slot>
     </span>
   </div>
+
 </template>
 
 <script>

@@ -246,7 +246,7 @@ var towns = [
 
 // create characs
 var characs = [
-  new Character("Conan",1), new Character("Xena",2)
+  new Character("Conan",3), new Character("Xena",2)
 ];
 // assign items to conan
 characs[0].slots[0].items.push(items[0]);

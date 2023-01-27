@@ -1,18 +1,13 @@
 <template>
-  <div style="height: 150px; width: 800px;">
-    <div class="row">
-      <div style="text-align: left; width: 90%; margin-left: 70px">
+  <v-responsive>
         <h1>Les rues de {{ selectedTown.nom }}</h1>
         <select v-model="selected" @change="navigateToSelectedStreet" class="townselect">
           <option disabled value="">Sélectionner une rue</option>
           <option v-for="(street, index) in selectedTown.rues" :key="index">{{ street.nom }}</option>
         </select>
-      </div>
-    </div>
-    <div class="row">
+
       <router-view name="shops"></router-view>
-    </div>
-  </div>
+  </v-responsive>
 </template>
 
 <script>

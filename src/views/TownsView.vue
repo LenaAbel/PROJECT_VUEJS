@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div style="display: flex">
+
       <!-- partie gauche -->
       <div style="text-align: left; width: 30%">
         <h1>Les villes</h1>
@@ -13,7 +13,7 @@
       <div v-if="selected">
         <router-view name="streets"></router-view>
       </div>
-    </div>
+
   </v-container>
 </template>
 

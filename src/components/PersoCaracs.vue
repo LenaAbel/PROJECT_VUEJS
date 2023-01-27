@@ -9,9 +9,8 @@
       <tr>
         <td>
           <ul>
-            <li><span style="color: darkblue"><b>Niveau :</b></span>{{ selected.niveau }}</li>
-            <li><span style="color: green"><b>Vie :</b></span>{{ selected.attributs.vie }}</li>
-            <li><b><span style="color: chocolate">Vitalité :</span></b> {{ selected.attributs.vitalite }}</li>
+            <li><b><span><slot name="niveau" :Niveau="selected.niveau"></slot></span></b></li>
+            <li><b><span><slot name="vitalite" :Vitalite="selected.attributs.vitalite" :Vie="selected.attributs.vie"></slot></span></b></li>
             <li><b><span style="color: red">Force :</span></b> {{ selected.attributs.force }}</li>
             <li><b><span style="color: dimgrey">Armure :</span></b> {{ selected.attributs.protection }}</li>
           </ul>
@@ -20,7 +19,6 @@
 
           <ul>
             <ul v-for="(slot, index) in slots" :key="index">
-<!--              {{ slot.label }} <span v-if="slot.items.length >0">[{{ slot.items.length }}]</span> :-->
               <v-btn style="margin: 10px" @click="navigateToSlot(slot.nom)" :key="index">{{ slot.label }}</v-btn>
               <span v-for="(item, index) in slot.items" :key="index">{{ item.nom }}, </span>
             </ul>
@@ -28,21 +26,11 @@
         </td>
       </tr>
       <tr>
-        <td><b> Or : <span style="color: goldenrod">{{ selected.or }}</span></b></td>
+        <td><b><slot name="or" :Or="selected.or"></slot></b></td>
+        <!--<td><b> Or : <span style="color: goldenrod">{{ selected.or }}</span></b></td>-->
         <td>
           <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
-            <!-- <CheckedList
-                :data="selected.itemsAchetes"
-                :fields="['nom','type']"
-                :checked="checkedBoughtItems"
-                item-check
-                :item-button="{show: true, text: 'price'}"
-                :list-button="{show: true, text: 'Infos'}"
-                @checked-changed="toggleItem"
-                @item-button-clicked="showItemPrice"
-                @list-button-clicked="showItemsInfo"
-            >
-            </CheckedList> -->
+
             <CheckedList
               :data="selected.itemsAchetes"
               :fields="['nom', 'type']"
@@ -52,8 +40,7 @@
               :list-button=true
               @checked-changed="toggleItem"
               @item-button-clicked="showItemPrice"
-              @list-button-clicked="showItemsInfo"
-          >
+              @list-button-clicked="showItemsInfo">
             <template v-slot:list-button>
               <v-btn color="green" @click="showItemsInfo">
                 Infos
@@ -109,7 +96,7 @@ export default {
   name: "PersoCaracs",
   components: {CheckedList},
   props: {
-    selected: Object
+    selected: Object,
   },
   data: () => ({
     idSelectedBoughtItems: [], // ce tableau ne contient que les ids des items achetés sélectionnés.
@@ -155,7 +142,7 @@ export default {
         return tab
       }
       return []
-    }
+    },
   },
   methods: {
     showItemPrice(itemName) {
@@ -192,27 +179,6 @@ export default {
         this.selectedItem = null;
       }
     },
-    unassignItemFromSlot(item, slot) {
-      console.log('unassignItemFromSlot', item, slot);
-      if (item && slot) {
-        this.$store.dispatch('unassignItemFromSlot', {item, slot})
-        this.selectedSlot = null;
-        this.selectedItem = null;
-      }
-    },
-    findItemsInEmplacements() {
-      let currentPerso = this.selected;
-      console.log('currentPerso : ', currentPerso);
-      let items = [];
-      for (let elt of currentPerso.emplacements) {
-        if (elt.items.length > 0) {
-          for (let eltElement of elt.items) {
-            items.push(eltElement);
-          }
-        }
-      }
-      return items;
-    },
     navigateToSlot(slotName) {
       console.log(slotName);
       this.$router.push({name: 'slot', params: {name: slotName}})}
@@ -231,8 +197,5 @@ export default {
   background-color: lightgreen;
 }
 
-.unassignselect {
-  background-color: lightcoral;
-  margin-bottom: 5px;
-}
+
 </style>
