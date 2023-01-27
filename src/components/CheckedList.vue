@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div style="margin: 10px">
     <p v-for="(item, indexRow) in data" :key="indexRow" class="d-flex">
       <input type="checkbox" v-if="itemCheck" :checked="checked[indexRow]" @click="$emit('checked-changed', indexRow)">
-      <slot name="item" :item="item" :index="indexRow"></slot>
+      <slot style="margin: 15px" name="item" :item="item" :index="indexRow"></slot>
       <span>
-        <slot name="item-button" :item="item" :index="indexRow"></slot>
+        <slot style="margin: 15px" name="item-button" :item="item" :index="indexRow"></slot>
       </span>
     </p>
     <span>
-      <slot name="list-button"></slot>
+      <slot style="margin: 15px" name="list-button"></slot>
     </span>
   </div>
 </template>

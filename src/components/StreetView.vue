@@ -1,7 +1,7 @@
 <template>
   <v-responsive>
         <h1>Les rues de {{ selectedTown.nom }}</h1>
-        <select v-model="selected" @change="navigateToSelectedStreet" class="townselect">
+        <select style="background-color: #C4A693;" v-model="selected" @change="navigateToSelectedStreet" class="townselect">
           <option disabled value="">Sélectionner une rue</option>
           <option v-for="(street, index) in selectedTown.rues" :key="index">{{ street.nom }}</option>
         </select>

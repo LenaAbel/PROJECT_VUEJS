@@ -2,11 +2,11 @@
   <div>
     <v-simple-table v-if="shop" >
       <tr class="text-center">
-        <td colspan="2"><b> <span style="color: cornflowerblue;">{{shop.nom.toUpperCase()}}</span></b></td>
+        <td colspan="2"><b> <span style="color: cornflowerblue;"><h3><span class="mdi mdi-store-marker"></span>  {{shop.nom.toUpperCase()}}</h3></span></b></td>
       </tr>
-      <tr class="text-center">
-        <td><b>Stock :</b> {{shop.itemStock.length}} items</td>
-        <td><b>Sur commande :</b> {{shop.itemCommande.length}} items</td>
+      <tr class="text-center" style="margin: 10px">
+        <td><h4><span class="mdi mdi-basket-plus-outline"></span> <b>Stock :</b> {{shop.itemStock.length}} items</h4></td>
+        <td><h4><span class="mdi mdi-cart-plus"></span> <b>Sur commande :</b> {{shop.itemCommande.length}} items</h4></td>
       </tr>
       <tr>
         <td>
@@ -21,17 +21,18 @@
             @item-button-clicked="buyOneItem"
             @list-button-clicked="buySelectedItems"> 
             <template v-slot:list-button>
-              <v-btn color="green" @click="buySelectedItems">
-                Buy all 
+              <v-btn  style="margin-right: 5px; align-content: center" color="#BCE8B6" @click="buySelectedItems">
+                <span class="mdi mdi-currency-usd"></span> Buy all
               </v-btn> 
             </template> 
             <template v-slot:item="{item}">
-              <div>{{item.text}}</div>
+              <div style="margin: 10px">{{item.text}}</div>
             </template>
             <template v-slot:item-button="{item, index}">
-              <v-btn :color="index % 2 === 0 ? 'red': 'blue'" @click="buyOneItem(item)">
+              <v-btn style="margin: 10px; align-content: center" :color="index % 2 === 0 ? '#E8CCB6': '#5BDDB3'" @click="buyOneItem(item)">
                 Buy
-              </v-btn> 
+              </v-btn>
+              <br>
             </template>
           </CheckedList>
         </td>
@@ -40,13 +41,12 @@
               :data="itemsCommande"
               :fields="['text']"
               :item-button=true
-              @item-button-clicked="orderOneItem"
-          >
+              @item-button-clicked="orderOneItem">
             <template v-slot:item="{item}">
-              <div>{{item.text}}</div>
+              <div style="margin: 5px; align-content: center">{{item.text}}</div>
             </template>
             <template v-slot:item-button="{item, index}">
-              <v-btn :color="index % 2 === 0 ? 'red': 'blue'" @click="orderOneItem(item)">
+              <v-btn style="margin: 10px; align-content: center" :color="index % 2 === 0 ? '#E8CCB6': '#5BDDB3'" @click="orderOneItem(item)">
                 Order
               </v-btn> 
             </template>

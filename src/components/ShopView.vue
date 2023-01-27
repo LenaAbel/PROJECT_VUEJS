@@ -1,10 +1,11 @@
 <template>
   <v-responsive>
   <h1>Les boutiques </h1>
-      <select v-model="selected" @change="setShop" class="townselect">
+      <select style="background-color: #C4A693; margin-bottom: 50px" v-model="selected" @change="setShop" class="townselect">
         <option disabled value="">Sélectionner une boutique</option>
         <option v-for="(shop, index) in selectedStreet.boutiques" :key="index">{{ shop.nom }}</option>
       </select>
+    <br>
     <div v-if="selected">
       <ShopDetails :shop="getCurrentShop"></ShopDetails>
     </div>

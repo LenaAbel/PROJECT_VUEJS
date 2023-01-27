@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 v-if="slotItems.length > 0"><span style="color: lightcoral">DESASSIGNER </span> UN OBJET</h3>
+    <h4 style="margin: 15px; " v-if="slotItems.length > 0"><span style="color: #D33F1E">DESASSIGNER </span> UN OBJET</h4>
     <select v-if="slotItems.length > 0" v-model="selectedItem" class="unassignselect"
             @change="unassignItemFromSlot(selectedItem)">
       <option disabled value="" selected>Sélectionner un item</option>
@@ -9,11 +9,17 @@
     </select>
     <br>
 
-    <h3>Slot : {{slotName}}</h3>
+    <h4 style="margin: 15px; color: #5BDDB3">SLOT : {{slotName.toUpperCase()}}</h4>
+    <v-simple-table style="margin: 10px; text-align: center">
+      <tr v-if="slotItems.length > 0">
+        <td v-for="(slot, index) in slotItems" :key="index">
+          <span >{{ slot.nom.toUpperCase() }}</span>
+        </td>
+
+      </tr>
+    </v-simple-table>
     <ul v-if="slotItems.length > 0">
-      <li v-for="(slot, index) in slotItems" :key="index">
-        <span >{{ slot.nom }}</span>
-      </li>
+        <span ></span>
     </ul>
     <span v-else>Pas d'items dans ce slot</span>
   </div>
@@ -21,13 +27,10 @@
 
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex';
-//import CheckedList from "@/components/CheckedList.vue";
 
 
 export default {
-  //components: {CheckedList},
   props: ['slotName'],
-  //components: {CheckedList},
   data: () => ({
     idSelectedBoughtItems: [], // ce tableau ne contient que les ids des items achetés sélectionnés.
     selectedItem: null,
@@ -98,17 +101,13 @@ export default {
 </script>
 
 <style>
-.assignselect {
-  background-color: lightblue;
-  margin-left: 3px;
-}
-
-.chooseselect {
-  background-color: lightgreen;
-}
 
 .unassignselect {
-  background-color: lightcoral;
+  background-color: #C4A693;
+  color: #512B1D;
+  font-weight: 800;
+  border-radius: 10px;
+  font-size: large;
   margin-bottom: 5px;
 }
 </style>

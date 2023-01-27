@@ -16,7 +16,7 @@
           <template #niveau="Niveau">
             Niveau : {{ Niveau.Niveau }}
             <template v-for="i in getCurrentPerso.niveau">
-              <v-icon color="blue lighten-2" :key="i" v-if="levelIcons[i]">{{ levelIcons[i] }}</v-icon>
+              <v-icon color="#39D3AB" :key="i" v-if="levelIcons[i]">{{ levelIcons[i] }}</v-icon>
             </template>
           </template>
           <template #vitalite="Vitalite">
@@ -88,9 +88,7 @@ export default {
 </script>
 
 <style>
-.persoselect {
-  background-color: lightgray;
-}
+
 
 .progress {
   width: 90%;

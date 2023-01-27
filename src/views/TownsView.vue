@@ -2,9 +2,9 @@
   <v-container>
 
       <!-- partie gauche -->
-      <div style="text-align: left; width: 30%">
+      <div style="text-align: left; width: 30%;">
         <h1>Les villes</h1>
-        <select v-model="selected"  @change="navigateToSelectedTown"  class="townselect" >
+        <select style="background-color: #C4A693;" v-model="selected"  @change="navigateToSelectedTown"  class="townselect" >
           <option disabled value="">Sélectionner une ville</option>
           <option v-for="(ville, index) in villesFiltre" :key="index">{{ville.nom}}</option>
         </select>
@@ -73,5 +73,14 @@ table, th, td {
 }
 .townselect {
   background-color: lightgray;
+}
+
+select {
+  background-color: #C4A693;
+  color: #512B1D;
+  font-weight: 800;
+  border-radius: 10px;
+  font-size: large;
+  align-items: center;
 }
 </style>

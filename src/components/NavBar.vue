@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <span v-for="(but, index) in titles" :key="index" :color="but.color" @click="goTo(index)">
       <slot name="link-to" :link="but"></slot>
     </span>
