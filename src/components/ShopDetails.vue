@@ -34,28 +34,6 @@
               </v-btn> 
             </template>
           </CheckedList>
-         <!-- <CheckedList
-            :data="itemStock"
-            :itemCheck="true"
-            :checked="checkedItemsStock"
-            :itemButton=true
-            :listButton=true
-            @checked-changed="toggleItemStock"
-            @item-button-clicked="buyOneItem"
-            @list-button-clicked="buySelectedItems"
-            ></CheckedList> -->
-          <!-- <CheckedList
-              :data="itemsStock"
-              :fields="['text']"
-              :checked="checkedItemsStock"
-              item-check
-              :item-button="{show: true, text: 'acheter'}"
-              :list-button="{show: true, text: 'acheter sélectionnés'}"
-              @checked-changed="toggleItemStock"
-              @item-button-clicked="buyOneItem"
-              @list-button-clicked="buySelectedItems"
-          >
-          </CheckedList> -->
         </td>
         <td>
           <CheckedList
